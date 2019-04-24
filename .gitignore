@@ -4,6 +4,7 @@
 debian/emoncms*
 settings.php
 old.settings.php
+!docker/settings.php
 emoncms.log
 .idea
 .vagrant/
