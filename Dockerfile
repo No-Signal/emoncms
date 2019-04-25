@@ -36,6 +36,8 @@ RUN mkdir /var/lib/phpfiwa && \
     chown www-data:root /var/lib/phpfina && \
     chown www-data:root /var/lib/phptimeseries
 
+RUN rm php-info.php
+
 # Create Emoncms logfile
 RUN touch /var/log/emoncms.log && \
     chmod 666 /var/log/emoncms.log
