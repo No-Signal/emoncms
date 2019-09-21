@@ -21,7 +21,7 @@ RUN a2enmod rewrite
 COPY docker/php.ini /usr/local/etc/php/
 
 # Clone in master Emoncms repo & modules - overwritten in development with local FS files
-RUN git clone https://github.com/emoncms/emoncms.git /var/www/html
+RUN git clone https://github.com/No-Signal/emoncms.git /var/www/html
 RUN git clone https://github.com/emoncms/dashboard.git /var/www/html/Modules/dashboard
 RUN git clone https://github.com/emoncms/graph.git /var/www/html/Modules/graph
 RUN git clone https://github.com/emoncms/app.git /var/www/html/Modules/app
@@ -35,8 +35,6 @@ RUN mkdir /var/lib/phpfiwa && \
     chown www-data:root /var/lib/phpfiwa && \
     chown www-data:root /var/lib/phpfina && \
     chown www-data:root /var/lib/phptimeseries
-
-RUN rm php-info.php
 
 # Create Emoncms logfile
 RUN touch /var/log/emoncms.log && \
