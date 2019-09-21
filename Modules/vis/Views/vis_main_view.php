@@ -10,9 +10,7 @@ Part of the OpenEnergyMonitor project: http://openenergymonitor.org
     global $path;
 ?>
 <?php
-    $domain3 = "vis_messages";
-    bindtextdomain($domain3, "Modules/vis/locale");
-    bind_textdomain_codeset($domain3, 'UTF-8');
+    load_language_files(dirname(__DIR__).'/locale',"vis_messages");
 ?>
 <script language="javascript" type="text/javascript" src="<?php echo $path; ?>Lib/flot/jquery.flot.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $path; ?>Lib/flot/jquery.flot.selection.min.js"></script>
@@ -73,7 +71,6 @@ Part of the OpenEnergyMonitor project: http://openenergymonitor.org
 <div id="visurl"></div>
 
 <script type="application/javascript">
-  var path = "<?php echo $path; ?>";
   var feedlist = <?php echo json_encode($feedlist); ?>;
   var widgets = <?php echo json_encode($visualisations); ?>;
   var embed = 0;
@@ -229,7 +226,7 @@ Part of the OpenEnergyMonitor project: http://openenergymonitor.org
   }
 
   function vis_resize() {
-    var width = $("#vispage").width() - 325;
+    var width = $("#vispage").width() - 349;
     if (width < 320) width = 320;
     var height = width * 0.5625;
     var vistype = $("#visselect").val();

@@ -60,7 +60,6 @@
 
     var feedid = <?php echo $feedid; ?>;
     var feedname = "<?php echo $feedidname; ?>";
-    var path = "<?php echo $path; ?>";
     var apikey = "<?php echo $apikey; ?>";
     var embed = <?php echo $embed; ?>;
     var valid = "<?php echo $valid; ?>";
@@ -367,8 +366,9 @@
             draw();
         });
         
+        $(document).on('window.resized hidden.sidebar.collapse shown.sidebar.collapse',vis_resize);
         
-        $(window).resize(function(){
+        function vis_resize() {
             var width = placeholder_bound.width();
             var height = placeholder_bound.width();
 
@@ -379,7 +379,7 @@
 
             if (embed) placeholder.height($(window).height()-top_offset);
             plot();
-        });
+        }
     });
 </script>
 

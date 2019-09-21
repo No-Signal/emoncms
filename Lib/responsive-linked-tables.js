@@ -54,7 +54,7 @@ $(function() {
         // debounce the call to save the current state to a local storage (cookie)
         clearTimeout(save_node_state_timeout)
         save_node_state_timeout = setTimeout(function(){
-            docCookies.setItem(local_cache_key, JSON.stringify(nodes_display))
+            docCookies.setItem(local_cache_key, JSON.stringify(nodes_display));
         },100)
     })
     // record the state change before animation starts
@@ -118,6 +118,11 @@ $(function() {
 
 // Calculate and color updated time
 function list_format_updated(time) {
+    var fv = list_format_updated_obj(time);
+    return "<span class='last-update' style='color:" + fv.color + ";'>" + fv.value + "</span>";
+}
+
+function list_format_updated_obj(time) {
     time = time * 1000;
     var servertime = new Date().getTime(); // - table.timeServerLocalOffset;
     var update = new Date(time).getTime();
@@ -143,7 +148,7 @@ function list_format_updated(time) {
     else if (secs < 60) color = "rgb(240,180,20)"; 
     else if (secs < (3600*2)) color = "rgb(255,125,20)"
     
-    return "<span class='last-update' style='color:" + color + ";'>" + updated + "</span>";
+    return {color:color,value:updated};
 }
 
 // Format value dynamically
@@ -314,45 +319,3 @@ Number.prototype.pad = function(size) {
     }
     return s;
 };
-
-// get/set document cookies
-var docCookies = {
-    getItem: function (sKey) {
-      if (!sKey) { return null; }
-      return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
-    },
-    setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
-      if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
-      var sExpires = "";
-      if (vEnd) {
-        switch (vEnd.constructor) {
-          case Number:
-          //   sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
-            sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; expires=" + (new Date(vEnd * 1e3 + Date.now())).toUTCString();
-            break;
-          case String:
-            sExpires = "; expires=" + vEnd;
-            break;
-          case Date:
-            sExpires = "; expires=" + vEnd.toUTCString();
-            break;
-        }
-      }
-      document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
-      return true;
-    },
-    removeItem: function (sKey, sPath, sDomain) {
-      if (!this.hasItem(sKey)) { return false; }
-      document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
-      return true;
-    },
-    hasItem: function (sKey) {
-      if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
-      return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
-    },
-    keys: function () {
-      var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
-      for (var nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
-      return aKeys;
-    }
-  };

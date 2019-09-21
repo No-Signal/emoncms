@@ -14,7 +14,7 @@
 
 function input_controller()
 {
-    global $mysqli, $redis, $user, $session, $route, $feed_settings,$param,$device;
+    global $mysqli, $redis, $user, $session, $route, $feed_settings, $param, $device, $path;
     
     // requires at least read access
     if (!isset($session['read'])) return false;
@@ -116,12 +116,13 @@ function input_controller()
         else if ($route->action == 'view') {
             $route->format = "html";
             textdomain("messages");
-            $ui_version_2 = $user->get_preferences($session['userid'], 'deviceView');
-            if ($device && isset($ui_version_2) && $ui_version_2) {
-                return view("Modules/input/Views/device_view.php", array());
-            } else {
-                return view("Modules/input/Views/input_view.php", array());
-            }
+            $device_module = false;
+            if (file_exists("Modules/device")) $device_module = true;
+            return view("Modules/input/Views/input_view.php", array(
+                'v' => 4,
+                'path' => $path,
+                'device_module' => $device_module
+            ));
         }    
         else if ($device && $route->action == 'schedule') {
             $route->format = "html";
@@ -180,6 +181,7 @@ function input_controller()
 
     else if ($route->action == "list") return $input->getlist($session['userid']);
     else if ($route->action == "getinputs") return $input->get_inputs($session['userid']);
+    else if ($route->action == "get_inputs") return $input->get_inputs($session['userid']);
 
     return array('content'=>$result);
 }
